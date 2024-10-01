@@ -1,0 +1,137 @@
+﻿
+@inject ILogger<EdAspUser> Logger
+
+<EditForm Model="AspUser" OnValidSubmit="@RegiserAccount" FormName="EdAspUser">
+    <div class="GridBiCut" id="">
+        <div class="HorzRect">
+           <h5>Select Global Location</h5>
+            <div class="mb-2">
+                <label>Global Region:</label>
+                <InputSelect @bind-Value=@AspUser!.GeoLocation.Region>
+                    @foreach (string g in Regions)
+                    {
+                        <option>@g</option>
+                    }
+                </InputSelect>
+            </div>
+
+            @if (!string.IsNullOrEmpty(AspUser!.GeoLocation.Region))
+            {
+                GetRegionCountry();
+                <div class="mb-2">
+                    <label>Country In Global Region:</label>
+                    <InputSelect @bind-Value=@AspUser!.GeoLocation.Country>
+                        @foreach (string c in Countrys)
+                        {
+                            <option>@c</option>
+                        }
+                    </InputSelect>
+                </div>
+                CheckCityStateVisible_ByCityLikeCountry(AspUser!.GeoLocation.Country);
+            }
+
+            @if (BvisibleState)
+            {
+                <div div class="mb-2">
+                    <label>Country State :</label>
+                    <InputText @bind-Value="AspUser!.GeoLocation.State" />
+                </div>
+            }
+            @if (BvisibleCity)
+            {
+                <div div class="mb-2">
+                    <label>City Name :</label>
+                    <InputText @bind-Value="AspUser!.GeoLocation.PostCode" />
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(AspUser!.GeoLocation.Country))
+            {
+                <div div class="mb-2">
+                    <label>Post Code :</label>
+                    <InputText @bind-Value="AspUser!.GeoLocation.PostCode" />
+                </div>
+            }
+
+        </div>
+        <div class="HorzRect">
+            <h5>Edit User Data</h5>
+
+            <div class="mt-2 mb-2">
+                <InputRadioGroup @bind-Value="AspUser!.Gender">
+                    @foreach (var option in rdOptions)
+                    {
+                        <InputRadio Value="option" />
+
+                        @option <br />
+                    }
+                </InputRadioGroup>
+            </div>
+
+            <div div class="mb-2">
+                <label>Enter Date of Birth</label>
+                <input type="date" value="2018-07-22" min="1930-01-01" max="2100-12-31" />
+            </div>
+            <div div class="mt-2 mb-2">
+                <InputText @bind-Value="AspUser!.AccountName" placeholder="Enter Account Name" />
+            </div>
+            <div div class="mb-2">
+                <InputText @bind-Value="AspUser!.Email" placeholder="Enter Email Box" />
+            </div>
+            <div div class="mb-2">
+                <InputText @bind-Value="AspUser!.Password" placeholder="Enter Password" />
+            </div>
+            <div div class="mb-2">
+                <InputText @bind-Value="AspUser!.PhoneNumber" placeholder="Enter Phone No" />
+            </div>
+            <div div class="mb-2">
+                <InputText @bind-Value="AspUser!.UserName" placeholder="Enter User Name" />
+            </div>
+        </div>
+    </div>
+    <div>
+        <button class="btngreen" type="submit" @onclick="RegiserAccount"><i class="fa-solid fa-id-card"></i>Submit</button>
+    </div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private EdAspUser? AspUser { get; set; }
+
+    public bool BvisibleCity = false;
+    public bool BvisibleState = false;
+    List<string> rdOptions = new List<string> { "Male", "Female" };
+    List<string> Regions = new List<string>();
+    List<string> Countrys = new List<string>();
+    List<string> Languals = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        AspUser ??= new() { StartDate = DateTime.UtcNow };
+        LoadRegions();
+    }
+
+    void LoadRegions()
+    {
+        for (int n = 0; n < GLocation.Regions.Length; n++)
+            Regions.Add(GLocation.Regions[n]);
+    }
+
+    void GetRegionCountry()
+    {
+        int RegionIdx = Regions.IndexOf(AspUser!.GeoLocation.Region);
+        if (Countrys.Count > 0) ;
+        Countrys.Clear();
+        for (int n = 0; n < GLocation.Countrys[RegionIdx].Length; n++)
+            Countrys.Add(GLocation.Countrys[RegionIdx][n]);
+    }
+
+    void CheckCityStateVisible_ByCityLikeCountry(string CityLikeCountry)
+    {
+        GLocation.CheckCityStateVisible_ByCityCountry(CityLikeCountry, ref BvisibleCity, ref BvisibleState);
+    }
+
+    private void RegiserAccount()
+    {
+    }
+
+}

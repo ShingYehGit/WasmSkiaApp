@@ -1,0 +1,52 @@
+﻿@page "/counter"
+
+@inject IJSRuntime JS
+@implements IDisposable
+
+<PageTitle>Counter</PageTitle>
+
+<div class="FitBody">
+    <div class="wrapper @("Width70") @("YellowBg")">
+        <h4>Reister User Account</h4>
+
+        <div class="tabs @("LimeGreenBg")">
+            <div class="tab">
+                <input type="radio" name="css-tabs" id="tab-1" checked class="tab-switch">
+                <label for="tab-1" class="tab-label @("GreenLabel")" @onclick="ToRegiser"><i class="fa-solid fa-id-card"></i>Regiser</label>
+                <div class="tab-content" id="EditUser">
+                    <EdUser />
+                </div>
+            </div>
+            <div class="tab">
+                <input type="radio" name="css-tabs" id="tab-2" class="tab-switch">
+                <label for="tab-2" class="tab-label @("GreenLabel")"><i class="fa-solid fa-cloud-arrow-down"></i>Azure</label>
+                <div class="tab-content" id="AccCloud">
+                    My father now and then sending me small sums of money,
+                  I laid them out in learning navigation, and other parts of the mathematics, useful to those who intend to travel,
+                  as I always believed it would be, some time or other, my fortune to do.
+              </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var jsInProcess = (IJSInProcessRuntime)JS;
+        //await jsInProcess.InvokeVoidAsync("showAlert", "Samuel Wang");//Work
+        //Hello ! Is there luck for all of us Things tough, Help tough get going
+        await jsInProcess.InvokeVoidAsync("EnableAllSubDivs", "EditUser");//Not Work
+    }
+
+    private void ToRegiser()
+    {
+    }
+
+    public void Dispose()
+    {
+    }
+
+}

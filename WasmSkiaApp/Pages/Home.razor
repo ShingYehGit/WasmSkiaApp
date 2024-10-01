@@ -1,0 +1,33 @@
+﻿@page "/"
+
+@inject IJSRuntime JS
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<button @onclick="CallJavaScript">Click Me</button>
+
+@code
+{
+
+    protected override async Task OnInitializedAsync()
+    {
+        var jsInProcess = (IJSInProcessRuntime)JS;
+        await jsInProcess.InvokeVoidAsync("showAlert", "Samuel Wang");//Work
+    }
+
+    private async Task CallJavaScript()
+    {
+        //WORK await JS.InvokeVoidAsync("helloFunction");
+        // NOT WORK await JS.InvokeVoidAsync("showAler", "Samuel Wang");
+
+        var jsInProcess = (IJSInProcessRuntime)JS;
+        //jsInProcess.InvokeVoid("showAlert", "Unkown user");//Work
+        await jsInProcess.InvokeVoidAsync("showAlert", "Unkown user");//Work
+        //jsInProcess.InvokeVoidAsync("helloFunction");//WORK
+    }
+
+}

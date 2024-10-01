@@ -1,0 +1,28 @@
+﻿@page "/weather"
+@inject HttpClient Http
+
+<PageTitle>Weather</PageTitle>
+
+<div class="FitBody">
+    <SKCanvasView @ref="skiaView" OnPaintSurface="OnPaintSurface" IgnorePixelScaling ="true"/>
+</div>
+
+@code {
+    SKCanvasView? skiaView = null!;
+    //SKPoint? touchLocation;
+    SKSize DisplayingSize = new SKSize();
+
+
+    void OnPaintSurface(SKPaintSurfaceEventArgs args)
+    {
+        SKImageInfo NewInfo = args.Info;
+        SKSurface surface = args.Surface;
+        SKCanvas canvas = surface.Canvas;
+
+        canvas.Clear(SKColors.White);
+
+        DisplayingSize = NewInfo.Size;
+    }
+
+
+}
